@@ -1,0 +1,1880 @@
+/* ==========================================================================
+   RPG 3D PORTFOLIO & CV - STYLESHEET
+   Inspired by Low-Poly Diorama & Tactile RPG Game UI Aesthetic
+   ========================================================================== */
+
+/* --- ROOT VARIABLES --- */
+:root {
+  /* Pastel Mint Diorama Backgrounds */
+  --bg-mint-light: #d8f7d4;
+  --bg-mint-core: #c8f4c4;
+  --bg-mint-mid: #b4e8b0;
+  --bg-mint-dark: #9edaa0;
+
+  /* Wood & UI Tones */
+  --wood-highlight: #ffc978;
+  --wood-light: #e69d4c;
+  --wood-main: #c47629;
+  --wood-shadow: #8f4c13;
+  --wood-dark: #5c2d08;
+  --wood-border: #3d1c04;
+
+  /* Stone Tones */
+  --stone-light: #d6d9e0;
+  --stone-main: #959bad;
+  --stone-shadow: #63687a;
+  --stone-dark: #373a45;
+
+  /* Parchment Colors */
+  --parchment-light: #fefcf3;
+  --parchment-main: #f5eed8;
+  --parchment-border: #d8c8a1;
+  --parchment-shadow: #b5a072;
+  --parchment-ink: #2b1f14;
+  --parchment-ink-light: #574635;
+
+  /* Heraldic Banner & Shield Accents */
+  --shield-bronze: #d9822b;
+  --shield-bronze-dark: #824409;
+  --shield-silver: #a0aec0;
+  --shield-silver-dark: #4a5568;
+  --shield-gold: #f6ad55;
+  --shield-red: #c53030;
+  --shield-blue: #2b6cb0;
+  --shield-purple: #6b46c1;
+  --shield-green: #2f855a;
+
+  /* Typography */
+  --font-display: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  --font-wood: 'Fredoka', cursive, sans-serif;
+  --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+
+  /* UI Transitions */
+  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --smooth-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- RESET & GLOBAL SETTINGS --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: var(--bg-mint-core);
+  font-family: var(--font-body);
+  color: var(--parchment-ink);
+  touch-action: pan-y;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-mint-mid);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--wood-main);
+  border-radius: 6px;
+  border: 2px solid var(--wood-border);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--wood-light);
+}
+
+/* --- CANVAS & 3D BACKGROUND --- */
+#canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: auto;
+  background: radial-gradient(circle at 50% 48%, var(--bg-mint-light) 0%, var(--bg-mint-core) 42%, var(--bg-mint-mid) 75%, var(--bg-mint-dark) 100%);
+}
+
+#canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+  display: block;
+}
+
+/* --- VIRTUAL SCROLL TRACK --- */
+#scroll-track {
+  position: relative;
+  width: 100%;
+  height: 500vh; /* 5 screen heights for cinematic camera glide */
+  z-index: 2;
+  pointer-events: none;
+}
+
+.scroll-section {
+  height: 100vh;
+  width: 100%;
+  pointer-events: none;
+}
+
+/* --- HUD & UI OVERLAY CONTAINER --- */
+#ui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  pointer-events: none; /* Let canvas receive interactions except on buttons */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 32px;
+  overflow: hidden;
+}
+
+/* Enable pointer events on interactive UI controls */
+#ui-overlay button,
+#ui-overlay [role="button"],
+#ui-overlay a,
+.banner-rack,
+.ui-side-controls,
+#hanging-explore-sign,
+#mascot-container,
+#scroll-mouse-indicator,
+#journey-nav {
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   TOP HANGING GUILD BANNERS
+   ========================================================================== */
+.banner-rack {
+  position: absolute;
+  top: 14px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.banner-rack-left {
+  left: 36px;
+}
+
+.banner-rack-right {
+  right: 36px;
+}
+
+/* Wooden crossbar */
+.banner-rod {
+  position: relative;
+  width: 175px;
+  height: 10px;
+  background: linear-gradient(180deg, var(--wood-highlight) 0%, var(--wood-main) 50%, var(--wood-dark) 100%);
+  border: 2px solid var(--wood-border);
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banner-rod .finial {
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle at 35% 35%, #ffe680 0%, #d4af37 60%, #7d6015 100%);
+  border: 2px solid var(--wood-border);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.banner-rod .finial-left {
+  margin-left: -7px;
+}
+.banner-rod .finial-right {
+  margin-right: -7px;
+}
+
+/* Banners group hanging below rod */
+.banners-group {
+  display: flex;
+  gap: 10px;
+  margin-top: -2px;
+}
+
+/* Hanging banner button */
+.hanging-banner {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transform-origin: top center;
+  transition: transform 0.3s var(--spring-bounce);
+}
+
+.hanging-banner:hover {
+  transform: scale(1.08) rotate(2deg);
+}
+.hanging-banner:active {
+  transform: scale(0.96);
+}
+
+.banner-cloth {
+  position: relative;
+  width: 44px;
+  height: 72px;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 12px;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 82%, 50% 100%, 0% 82%);
+}
+
+.banner-cloth .banner-border {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 8px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.5);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 83%, 50% 98%, 0% 83%);
+  pointer-events: none;
+}
+
+.banner-emblem {
+  position: relative;
+  z-index: 2;
+  font-size: 20px;
+  color: #fff;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+}
+
+/* Hanging banner color themes */
+.banner-red .banner-cloth {
+  background: linear-gradient(180deg, #e53e3e 0%, #9b2c2c 100%);
+  border-top: 3px solid #742a2a;
+}
+.banner-blue .banner-cloth {
+  background: linear-gradient(180deg, #3182ce 0%, #1a365d 100%);
+  border-top: 3px solid #102a43;
+}
+.banner-purple .banner-cloth {
+  background: linear-gradient(180deg, #805ad5 0%, #44337a 100%);
+  border-top: 3px solid #322659;
+}
+.banner-orange .banner-cloth {
+  background: linear-gradient(180deg, #dd6b20 0%, #7b341e 100%);
+  border-top: 3px solid #652b19;
+}
+.banner-violet .banner-cloth {
+  background: linear-gradient(180deg, #9f7aea 0%, #553c9a 100%);
+  border-top: 3px solid #44337a;
+}
+.banner-green .banner-cloth {
+  background: linear-gradient(180deg, #38a169 0%, #1c4532 100%);
+  border-top: 3px solid #143525;
+}
+
+/* Banner hover tooltip */
+.banner-tooltip {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: var(--wood-border);
+  color: #fff;
+  font-family: var(--font-wood);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  border: 1px solid var(--wood-highlight);
+}
+
+.hanging-banner:hover .banner-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   MAIN 3D CHUNKY HEADER (MATCHING REFERENCE IMAGE)
+   ========================================================================== */
+#main-header {
+  position: relative;
+  z-index: 15;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-title-3d {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.2vw, 4.4rem);
+  line-height: 0.95;
+  letter-spacing: 0.03em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+/* Top Line: "3D GAME DEVELOPER" in warm carved wood */
+.title-wood {
+  display: inline-block;
+  background: linear-gradient(180deg, #ffe08a 0%, #f6a948 40%, #c86918 70%, #9c4505 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 var(--wood-border));
+  position: relative;
+  padding-bottom: 2px;
+  /* Thick 3D extruded block shadow */
+  text-shadow:
+    0 1px 0 #4a220a,
+    0 2px 0 #4a220a,
+    0 3px 0 #3d1c08,
+    0 4px 0 #3d1c08,
+    0 5px 0 #2b1304,
+    0 6px 0 #2b1304,
+    0 7px 14px rgba(43, 19, 4, 0.45);
+}
+
+/* Second Line: "& DESIGNER" in carved stone */
+.title-stone {
+  display: inline-block;
+  background: linear-gradient(180deg, #edf2f7 0%, #cbd5e0 40%, #8792a4 70%, #525a6c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 var(--stone-dark));
+  position: relative;
+  /* Thick 3D stone block shadow */
+  text-shadow:
+    0 1px 0 #2d323e,
+    0 2px 0 #2d323e,
+    0 3px 0 #232731,
+    0 4px 0 #232731,
+    0 5px 0 #181b22,
+    0 6px 0 #181b22,
+    0 7px 14px rgba(24, 27, 34, 0.45);
+}
+
+/* Developer Sub-Badge */
+.developer-sub-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  background: rgba(61, 28, 4, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 5px 16px;
+  border-radius: 20px;
+  border: 2px solid var(--wood-highlight);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  animation: pulseBadge 3s ease-in-out infinite alternate;
+}
+
+@keyframes pulseBadge {
+  0% { transform: scale(1); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); }
+  100% { transform: scale(1.02); box-shadow: 0 6px 14px rgba(230, 157, 76, 0.4); }
+}
+
+.developer-sub-badge .badge-icon {
+  color: #ffc978;
+  font-size: 13px;
+}
+
+.developer-sub-badge .badge-text {
+  font-family: var(--font-wood);
+  font-size: clamp(0.72rem, 1.2vw, 0.88rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   SIDE WOODEN SIGNBOARDS & CONTROLS (TACTILE DIEGETIC BUTTONS)
+   ========================================================================== */
+.ui-side-controls {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  z-index: 20;
+}
+
+.controls-left {
+  left: 36px;
+}
+
+.controls-right {
+  right: 36px;
+  align-items: flex-end;
+}
+
+.signboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Standard Wooden Plank Signboard */
+.wood-signboard {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.25s var(--spring-bounce), filter 0.2s ease;
+}
+
+.wood-signboard:hover {
+  transform: scale(1.06) translateY(-4px);
+  filter: brightness(1.08);
+}
+.wood-signboard:active {
+  transform: scale(0.96) translateY(2px);
+  filter: brightness(0.95);
+}
+
+.wood-plank {
+  position: relative;
+  width: 170px;
+  height: 58px;
+  background: linear-gradient(180deg, #f5b161 0%, #db8731 25%, #bf6c1a 75%, #8f4607 100%);
+  border: 4px solid var(--wood-border);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.35),
+    0 8px 16px rgba(45, 25, 12, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Wood grain texture simulation */
+.wood-plank::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 20px,
+    rgba(92, 45, 8, 0.08) 22px,
+    transparent 25px
+  );
+  pointer-events: none;
+}
+
+/* Brass Rivets on corners */
+.rivet {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: radial-gradient(circle at 35% 35%, #fff0a8 0%, #cca334 60%, #614603 100%);
+  border: 1px solid var(--wood-border);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+.rivet-tl { top: 6px; left: 6px; }
+.rivet-tr { top: 6px; right: 6px; }
+.rivet-bl { bottom: 6px; left: 6px; }
+.rivet-br { bottom: 6px; right: 6px; }
+
+/* 3D Sign Text */
+.sign-text-3d {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  letter-spacing: 0.05em;
+  color: #fff9ee;
+  text-shadow:
+    0 1px 0 #5c2d08,
+    0 2px 0 #5c2d08,
+    0 3px 0 #3d1c04,
+    0 4px 0 #3d1c04,
+    0 5px 8px rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: 1.5px #3d1c04;
+}
+
+.sign-text-amber {
+  color: #fff4d1;
+}
+
+.sign-text-blue {
+  color: #eaf3ff;
+}
+
+/* Subtitle beneath signboard */
+.sign-subtext {
+  font-family: var(--font-wood);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2b180d;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   SHIELD-CRESTED SIGNBOARDS (MESSAGE & RESUME BUTTONS)
+   ========================================================================== */
+.shield-signboard {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: transform 0.25s var(--spring-bounce), filter 0.2s ease;
+}
+
+.shield-signboard:hover {
+  transform: scale(1.06) translateY(-4px);
+  filter: brightness(1.08);
+}
+.shield-signboard:active {
+  transform: scale(0.96) translateY(2px);
+  filter: brightness(0.95);
+}
+
+.wood-plank-shield {
+  width: 155px;
+  margin-left: -20px; /* Nest shield on the left edge */
+  z-index: 1;
+}
+
+.controls-right .wood-plank-shield {
+  margin-left: 0;
+  margin-right: -20px;
+}
+.controls-right .shield-signboard {
+  flex-direction: row-reverse;
+}
+
+/* Shield Crest Shape & Rim */
+.shield-crest {
+  position: relative;
+  width: 52px;
+  height: 64px;
+  z-index: 2;
+  border-radius: 6px 6px 26px 26px;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.4),
+    inset 0 2px 3px rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3.5px solid;
+}
+
+.shield-orange {
+  background: linear-gradient(180deg, #ed8936 0%, #c05621 60%, #7b341e 100%);
+  border-color: #fbd38d;
+  box-shadow: 0 6px 14px rgba(192, 86, 33, 0.45);
+}
+
+.shield-blue {
+  background: linear-gradient(180deg, #4299e1 0%, #2b6cb0 60%, #1a365d 100%);
+  border-color: #bee3f8;
+  box-shadow: 0 6px 14px rgba(43, 108, 176, 0.45);
+}
+
+.shield-inner {
+  font-size: 20px;
+  color: #fff;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+}
+
+/* ==========================================================================
+   CENTER HANGING WOODEN SIGN: "SCROLL TO EXPLORE" ON CHAINS
+   ========================================================================== */
+#hanging-explore-sign {
+  position: absolute;
+  bottom: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 18;
+}
+
+/* Hanging chains */
+.chain {
+  position: absolute;
+  top: -34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.chain-left {
+  left: 36px;
+}
+.chain-right {
+  right: 36px;
+}
+
+.chain .link {
+  width: 7px;
+  height: 12px;
+  border: 2px solid #5a5f6d;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #cbd5e0 0%, #718096 100%);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+}
+
+.chain-signboard {
+  position: relative;
+  background: linear-gradient(180deg, #e39a48 0%, #c06d1c 40%, #8c4505 100%);
+  border: 3.5px solid var(--wood-border);
+  border-radius: 10px;
+  padding: 10px 24px;
+  cursor: pointer;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.4),
+    0 10px 20px rgba(45, 25, 12, 0.4);
+  transition: transform 0.25s var(--spring-bounce), filter 0.2s ease;
+  animation: gentleSway 4s ease-in-out infinite alternate;
+}
+
+@keyframes gentleSway {
+  0% { transform: rotate(-0.8deg); }
+  100% { transform: rotate(0.8deg); }
+}
+
+.chain-signboard:hover {
+  transform: scale(1.05) translateY(-3px) rotate(0deg);
+  filter: brightness(1.08);
+}
+
+.chain-ring {
+  position: absolute;
+  top: -8px;
+  width: 12px;
+  height: 12px;
+  border: 2.5px solid #4a5568;
+  border-radius: 50%;
+  background: #cbd5e0;
+}
+.ring-left { left: 33px; }
+.ring-right { right: 33px; }
+
+.chain-sign-text {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  color: #fffbf2;
+  text-shadow:
+    0 1px 0 #4a220a,
+    0 2px 0 #3d1c08,
+    0 3px 6px rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: 1px #3d1c08;
+}
+
+/* Post pole going down into the diorama */
+.sign-post-pole {
+  width: 14px;
+  height: 48px;
+  background: linear-gradient(90deg, #5c2d08 0%, #8f4607 40%, #5c2d08 100%);
+  border: 2px solid var(--wood-border);
+  border-top: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-top: -3px;
+}
+
+/* ==========================================================================
+   BOTTOM LEFT: 2.5D INTERACTIVE WIZARD MASCOT
+   ========================================================================== */
+#mascot-container {
+  position: absolute;
+  bottom: 24px;
+  left: 38px;
+  width: 72px;
+  height: 95px;
+  cursor: pointer;
+  z-index: 25;
+}
+
+.wizard-character {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s var(--spring-bounce);
+  animation: wizardIdle 3s ease-in-out infinite alternate;
+}
+
+@keyframes wizardIdle {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+#mascot-container:hover .wizard-character {
+  transform: scale(1.15) translateY(-8px);
+}
+
+/* Wizard Hat */
+.wiz-hat {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 42px;
+  z-index: 5;
+}
+
+.wiz-hat-cone {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 34px solid #6b46c1;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+}
+
+.wiz-hat-brim {
+  position: absolute;
+  bottom: 4px;
+  left: -4px;
+  width: 52px;
+  height: 12px;
+  background: #553c9a;
+  border: 2px solid #322659;
+  border-radius: 50%;
+}
+
+.wiz-hat-star {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffd700;
+  font-size: 10px;
+}
+
+/* Wizard Head, Eyes & Beard */
+.wiz-head {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 30px;
+  background: #fbd38d;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.wiz-eyes {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 6;
+}
+
+.wiz-eye {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  background: #2d3748;
+  border-radius: 50%;
+}
+
+.wiz-pupil {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.wiz-beard {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 24px;
+  background: #e2e8f0;
+  border-radius: 0 0 16px 16px;
+  border: 1.5px solid #cbd5e0;
+  z-index: 4;
+}
+
+/* Wizard Robe Body */
+.wiz-body {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 38px;
+  z-index: 2;
+}
+
+.wiz-robe {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #6b46c1 0%, #44337a 100%);
+  border-radius: 8px 8px 12px 12px;
+  border: 2px solid #322659;
+}
+
+.wiz-belt {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #744210;
+  border-top: 1px solid #975a16;
+  border-bottom: 1px solid #4a2d0b;
+}
+
+/* Wizard Staff & Gem */
+.wiz-hand-right {
+  position: absolute;
+  top: 48px;
+  right: 2px;
+  z-index: 6;
+}
+
+.wiz-staff {
+  position: relative;
+  width: 4px;
+  height: 48px;
+  background: #7b341e;
+  border-radius: 2px;
+  border: 1px solid #4a1f11;
+  transform: rotate(12deg);
+}
+
+.staff-gem {
+  position: absolute;
+  top: -8px;
+  left: -5px;
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle at 35% 35%, #90cdf4 0%, #3182ce 60%, #1a365d 100%);
+  border: 1.5px solid #ebf8ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #63b3ed;
+  animation: gemGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes gemGlow {
+  0% { box-shadow: 0 0 6px #63b3ed; }
+  100% { box-shadow: 0 0 16px #90cdf4; }
+}
+
+/* Wizard Mascot Speech Bubble */
+.wiz-speech-bubble {
+  position: absolute;
+  bottom: 102%;
+  left: 0;
+  width: 190px;
+  background: var(--parchment-light);
+  border: 2.5px solid var(--wood-border);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--parchment-ink);
+  line-height: 1.35;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.25s var(--spring-bounce);
+  pointer-events: none;
+  z-index: 30;
+}
+
+.wiz-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 24px;
+  border-width: 9px 8px 0;
+  border-style: solid;
+  border-color: var(--wood-border) transparent transparent;
+}
+
+#mascot-container:hover .wiz-speech-bubble,
+#mascot-container.active .wiz-speech-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mascot-shadow {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 10px;
+  background: rgba(43, 60, 35, 0.3);
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   BOTTOM RIGHT: CUSTOM ANIMATED MOUSE-WHEEL INDICATOR
+   ========================================================================== */
+#scroll-mouse-indicator {
+  position: absolute;
+  bottom: 26px;
+  right: 38px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  z-index: 25;
+  transition: transform 0.25s var(--spring-bounce);
+}
+
+#scroll-mouse-indicator:hover {
+  transform: translateY(-4px);
+}
+
+.indicator-label {
+  font-family: var(--font-wood);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2b180d;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.mouse-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.mouse-body {
+  width: 24px;
+  height: 38px;
+  background: #fff;
+  border: 3px solid #2b180d;
+  border-radius: 14px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+.mouse-wheel {
+  width: 4px;
+  height: 8px;
+  background: #e53e3e;
+  border-radius: 3px;
+  animation: mouseWheelScroll 1.6s ease-in-out infinite;
+}
+
+@keyframes mouseWheelScroll {
+  0% { transform: translateY(0); opacity: 1; }
+  60% { transform: translateY(8px); opacity: 0.2; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.mouse-arrow {
+  color: #2b180d;
+  font-size: 13px;
+  animation: bounceArrow 1.6s ease-in-out infinite;
+}
+
+@keyframes bounceArrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+/* ==========================================================================
+   WAYPOINT PILL NAVIGATION (DIORAMA LANDMARK JUMP BAR)
+   ========================================================================== */
+#journey-nav {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  background: rgba(61, 28, 4, 0.88);
+  backdrop-filter: blur(6px);
+  padding: 5px 8px;
+  border-radius: 24px;
+  border: 2px solid var(--wood-highlight);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  z-index: 22;
+}
+
+.waypoint-pill {
+  background: transparent;
+  border: none;
+  color: #eedcc6;
+  font-family: var(--font-wood);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.waypoint-pill:hover {
+  background: rgba(255, 201, 120, 0.25);
+  color: #fff;
+}
+
+.waypoint-pill.active {
+  background: linear-gradient(180deg, #f6a948 0%, #c86918 100%);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   3D RAYCASTER FLOATING TOOLTIP BADGE
+   ========================================================================== */
+#rpg-tooltip {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.rpg-tooltip-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -85%) !important;
+}
+
+.tooltip-badge {
+  background: linear-gradient(180deg, #4a2810 0%, #291404 100%);
+  border: 2px solid var(--wood-highlight);
+  border-radius: 10px;
+  padding: 8px 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: #fff;
+}
+
+.tooltip-icon {
+  font-size: 15px;
+  color: #ffc978;
+}
+
+.tooltip-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  color: #fffbf2;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.tooltip-prompt {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffd700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tooltip-pointer {
+  width: 0;
+  height: 0;
+  margin: 0 auto;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid var(--wood-highlight);
+}
+
+/* ==========================================================================
+   RPG QUEST PARCHMENT MODAL
+   ========================================================================== */
+#rpg-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(18, 25, 15, 0.65);
+  backdrop-filter: blur(5px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-backdrop-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rpg-modal {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  background: var(--parchment-main);
+  border: 6px solid var(--wood-border);
+  border-radius: 18px;
+  box-shadow:
+    inset 0 0 50px rgba(181, 160, 114, 0.45),
+    0 16px 40px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95) translateY(15px);
+  transition: transform 0.35s var(--spring-bounce);
+}
+
+#rpg-modal-backdrop:not(.modal-backdrop-hidden) .rpg-modal {
+  transform: scale(1) translateY(0);
+}
+
+/* Modal Frame Header */
+.modal-frame-header {
+  position: relative;
+  background: linear-gradient(180deg, #d98f3c 0%, #aa5816 50%, #6d3309 100%);
+  border-bottom: 4px solid var(--wood-border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.modal-wax-seal {
+  width: 38px;
+  height: 38px;
+  background: radial-gradient(circle at 35% 35%, #e53e3e 0%, #9b2c2c 70%, #63171b 100%);
+  border: 2px solid #ff8787;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  letter-spacing: 0.04em;
+  color: #fffaf0;
+  text-shadow:
+    0 1px 0 #4a220a,
+    0 2px 0 #3d1c08,
+    0 3px 6px rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: 1px #3d1c08;
+  text-align: center;
+  flex: 1;
+  margin: 0 16px;
+}
+
+.modal-close-btn {
+  width: 36px;
+  height: 36px;
+  background: #4a220a;
+  border: 2px solid var(--wood-highlight);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s var(--spring-bounce), background 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  transform: scale(1.15) rotate(90deg);
+  background: #c53030;
+}
+
+/* Modal Parchment Body */
+.modal-body-scroll {
+  padding: 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+  font-family: var(--font-body);
+  color: var(--parchment-ink);
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(254, 252, 243, 0.9) 0%, rgba(245, 238, 216, 0.85) 100%),
+    repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(181, 160, 114, 0.05) 16px);
+}
+
+/* Modal Footer */
+.modal-frame-footer {
+  background: #ecd9ba;
+  border-top: 3px solid var(--parchment-border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.rpg-btn-primary {
+  background: linear-gradient(180deg, #48bb78 0%, #2f855a 60%, #1c4532 100%);
+  border: 2.5px solid #143525;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.03em;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s var(--spring-bounce), filter 0.2s ease;
+}
+
+.rpg-btn-primary:hover {
+  transform: scale(1.05) translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* ==========================================================================
+   MODAL INTERIOR CONTENT STYLING (ABOUT, TIMELINE, PROJECTS, SKILLS, CONTACT)
+   ========================================================================== */
+
+/* Profile Header Card */
+.profile-hero-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid var(--parchment-border);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.profile-avatar-box {
+  width: 90px;
+  height: 90px;
+  border-radius: 14px;
+  border: 3px solid var(--wood-main);
+  background: #eedcc6;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.profile-avatar-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-avatar-box .avatar-placeholder {
+  font-size: 38px;
+  color: var(--wood-dark);
+}
+
+.profile-info-box h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--wood-border);
+  margin-bottom: 4px;
+}
+
+.profile-info-box .profile-role {
+  font-family: var(--font-wood);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--wood-main);
+  margin-bottom: 8px;
+}
+
+.profile-info-box .profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: var(--parchment-ink-light);
+}
+
+.profile-info-box .profile-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Bio Scroll Section */
+.parchment-section-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--wood-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 12px 0;
+  border-bottom: 2px dashed var(--parchment-border);
+  padding-bottom: 6px;
+}
+
+.parchment-section-title i {
+  color: var(--wood-main);
+}
+
+.bio-paragraph {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--parchment-ink);
+  margin-bottom: 16px;
+}
+
+/* Education & Experience Timeline Cards */
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.timeline-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid var(--parchment-border);
+  border-left: 5px solid var(--wood-main);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.timeline-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.timeline-title {
+  font-family: var(--font-wood);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--wood-border);
+}
+
+.timeline-period {
+  font-size: 0.82rem;
+  font-weight: 800;
+  background: #eedcc6;
+  color: var(--wood-dark);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.timeline-institution {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--wood-main);
+  margin-bottom: 6px;
+}
+
+.timeline-description {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--parchment-ink-light);
+  margin-bottom: 8px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #e2d3b3;
+  color: var(--wood-border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--parchment-shadow);
+}
+
+/* Projects Grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px solid var(--parchment-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s var(--spring-bounce);
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+}
+
+.project-thumb {
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(135deg, #4a2810 0%, #2b1404 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffc978;
+  font-size: 42px;
+  position: relative;
+}
+
+.project-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-category-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(61, 28, 4, 0.85);
+  color: #ffd700;
+  font-size: 0.75rem;
+  font-family: var(--font-wood);
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--wood-highlight);
+}
+
+.project-details {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.project-title {
+  font-family: var(--font-wood);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--wood-border);
+  margin-bottom: 6px;
+}
+
+.project-desc {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--parchment-ink-light);
+  margin-bottom: 12px;
+  flex: 1;
+}
+
+.project-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-project-action {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-project-demo {
+  background: #3182ce;
+  border: 1.5px solid #1a365d;
+  color: #fff;
+}
+.btn-project-demo:hover {
+  background: #2b6cb0;
+}
+
+.btn-project-code {
+  background: #4a5568;
+  border: 1.5px solid #2d3748;
+  color: #fff;
+}
+.btn-project-code:hover {
+  background: #2d3748;
+}
+
+/* Skills Category & Mastery Bars */
+.skills-category-group {
+  margin-bottom: 18px;
+}
+
+.skills-category-name {
+  font-family: var(--font-wood);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--wood-border);
+  margin-bottom: 10px;
+}
+
+.skills-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.skill-item-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid var(--parchment-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.skill-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.skill-name {
+  color: var(--wood-border);
+}
+
+.skill-level-badge {
+  font-size: 0.75rem;
+  color: var(--wood-main);
+  background: #eedcc6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.skill-meter {
+  width: 100%;
+  height: 8px;
+  background: #e2d3b3;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--parchment-border);
+}
+
+.skill-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #dd6b20 0%, #38a169 100%);
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+/* Contact Scroll & Quick Messenger */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.contact-card-box {
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px solid var(--parchment-border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.contact-card-box:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.contact-icon-bubble {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--wood-main);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-info-text strong {
+  display: block;
+  font-family: var(--font-wood);
+  font-size: 0.92rem;
+  color: var(--wood-border);
+}
+
+.contact-info-text span {
+  font-size: 0.85rem;
+  color: var(--parchment-ink-light);
+}
+
+/* Social Links Buttons */
+.socials-flex-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.social-button-rpg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--wood-border);
+  color: #fff;
+  border: 1.5px solid var(--wood-highlight);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s var(--spring-bounce), background 0.2s ease;
+}
+
+.social-button-rpg:hover {
+  transform: translateY(-3px);
+  background: var(--wood-main);
+}
+
+/* Toast Message */
+#rpg-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: rgba(61, 28, 4, 0.95);
+  border: 2px solid var(--wood-highlight);
+  border-radius: 12px;
+  padding: 10px 22px;
+  color: #fff;
+  font-family: var(--font-wood);
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 300;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(20px) !important;
+  pointer-events: none;
+}
+
+.toast-icon {
+  color: #ffd700;
+}
+
+/* ==========================================================================
+   RESPONSIVE SCALING & MOBILE ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  #ui-overlay {
+    padding: 16px 20px;
+  }
+  .banner-rack-left { left: 16px; }
+  .banner-rack-right { right: 16px; }
+  .controls-left { left: 16px; }
+  .controls-right { right: 16px; }
+  .wood-plank { width: 140px; height: 50px; }
+  .sign-text-3d { font-size: 1.5rem; }
+  .shield-crest { width: 44px; height: 54px; }
+  .wood-plank-shield { width: 125px; }
+}
+
+@media (max-width: 768px) {
+  #main-header {
+    margin-top: 55px; /* Leave room for mobile banners */
+  }
+  .banner-rack {
+    top: 8px;
+  }
+  .banner-rack-left { left: 10px; }
+  .banner-rack-right { right: 10px; }
+  .banner-rod { width: 120px; height: 8px; }
+  .banner-cloth { width: 34px; height: 54px; }
+  .banner-emblem { font-size: 15px; }
+
+  /* Reposition side signboards for mobile */
+  .ui-side-controls {
+    gap: 16px;
+    top: auto;
+    bottom: 95px;
+    transform: none;
+  }
+  .controls-left {
+    left: 14px;
+    align-items: flex-start;
+  }
+  .controls-right {
+    right: 14px;
+    align-items: flex-end;
+  }
+  .wood-plank {
+    width: 110px;
+    height: 42px;
+  }
+  .sign-text-3d {
+    font-size: 1.15rem;
+  }
+  .sign-subtext {
+    font-size: 0.85rem;
+  }
+  .shield-crest {
+    width: 36px;
+    height: 44px;
+    border-width: 2.5px;
+  }
+  .shield-inner {
+    font-size: 14px;
+  }
+  .wood-plank-shield {
+    width: 95px;
+    margin-left: -14px;
+  }
+  .controls-right .wood-plank-shield {
+    margin-right: -14px;
+  }
+
+  /* Center explore sign */
+  #hanging-explore-sign {
+    bottom: 75px;
+  }
+  .chain-signboard {
+    padding: 6px 14px;
+  }
+  .chain-sign-text {
+    font-size: 1.05rem;
+  }
+  .chain {
+    top: -24px;
+  }
+  .chain .link {
+    height: 9px;
+  }
+
+  /* Mascot and mouse indicator */
+  #mascot-container {
+    bottom: 12px;
+    left: 12px;
+    transform: scale(0.85);
+    transform-origin: bottom left;
+  }
+  #scroll-mouse-indicator {
+    bottom: 12px;
+    right: 12px;
+  }
+  .indicator-label {
+    display: none;
+  }
+
+  /* Journey Nav */
+  #journey-nav {
+    display: none; /* Hide bottom pill bar on small mobile screens to keep view clean */
+  }
+
+  .rpg-modal {
+    max-height: 94vh;
+  }
+  .modal-body-scroll {
+    padding: 16px;
+  }
+  .profile-hero-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}

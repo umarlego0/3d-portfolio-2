@@ -1,0 +1,134 @@
+{
+  "_instructions": "Fill in any empty string ('') below with your asset paths (e.g., './assets/avatar.jpg') or social URLs.",
+  "profile": {
+    "fullName": "MUHAMMAD UMAR FAROOQ",
+    "headline": "CS STUDENT & CREATOR",
+    "subHeadline": "Game Developer, 3D Generalist & Video Editor",
+    "bio": "Computer Science undergraduate at the University of Central Punjab specializing in programming, algorithms, data structures, game development in Unity & Unreal Engine, 3D modeling in Blender, and creative video production.",
+    "location": "Wapda Town, Gujranwala, Punjab, Pakistan",
+    "email": "Umarleg01@gmail.com",
+    "phone": "+92 310 7227522",
+    "avatarPath": "",
+    "cvPdfPath": "",
+    "languages": ["English", "Urdu"],
+    "hobbies": ["Video Gaming", "Coding", "Exercising", "Puzzle Solving"]
+  },
+  "socials": {
+    "github": "",
+    "linkedin": "",
+    "itchio": "",
+    "youtube": "",
+    "instagram": "",
+    "artstation": "",
+    "website": ""
+  },
+  "education": [
+    {
+      "degree": "BS Computer Science",
+      "institution": "University of Central Punjab (UCP)",
+      "period": "Jul 2024 - Present",
+      "details": "Pursuing a 4-year BS degree in Computer Science with focus on programming, algorithms, data structures, and software development."
+    },
+    {
+      "degree": "Intermediate (FSc)",
+      "institution": "Board of Intermediate and Secondary Education, Punjab",
+      "period": "Completed: 2024",
+      "details": "Grade: A"
+    },
+    {
+      "degree": "Matriculation (SSC)",
+      "institution": "Board of Intermediate and Secondary Education, Punjab",
+      "period": "Completed: 2022",
+      "details": "Grade: A"
+    }
+  ],
+  "experienceRoll": [
+    {
+      "role": "Full-Time BS Computer Science Student",
+      "company": "University of Central Punjab",
+      "period": "2024 - Present",
+      "location": "Lahore / Gujranwala",
+      "description": "Actively pursuing undergraduate studies, specializing in computer science fundamentals, game engines (Unity & Unreal), and technical software projects.",
+      "tags": ["C++", "Data Structures", "Unity", "Unreal Engine"]
+    },
+    {
+      "role": "Manager",
+      "company": "Kingston Auto Paint Booth",
+      "period": "2023 - 2024",
+      "location": "Khiali, Gujranwala",
+      "description": "Managed daily operations, coordinated team workflows, and ensured strict service quality standards in an automotive paint facility.",
+      "tags": ["Operations Management", "Workflow Coordination", "Quality Control"]
+    },
+    {
+      "role": "Part-Time Cashier / Chef",
+      "company": "Chicken Munch",
+      "period": "2022",
+      "location": "Kings Mall, Gujranwala",
+      "description": "Handled monetary transactions accurately, performed food preparation tasks, and maintained strict safety and hygiene standards.",
+      "tags": ["POS & Cash Handling", "Fast-Paced Operations", "Safety Standards"]
+    },
+    {
+      "role": "Part-Time Salesman",
+      "company": "Family Mart",
+      "period": "2019",
+      "location": "Wapda Town, Gujranwala",
+      "description": "Provided customer service, managed inventory stock levels, and assisted with daily retail floor operations.",
+      "tags": ["Customer Service", "Inventory Management", "Retail"]
+    }
+  ],
+  "skills": [
+    {
+      "category": "Programming & Low-Level",
+      "items": [
+        { "name": "C++", "level": "Advanced" },
+        { "name": "HTML5 / CSS3 / JavaScript", "level": "Proficient" },
+        { "name": "Three.js / WebGL", "level": "Exploring" },
+        { "name": "8086 Assembly Language", "level": "Intermediate" }
+      ]
+    },
+    {
+      "category": "Game Development & 3D",
+      "items": [
+        { "name": "Unity Engine", "level": "Proficient" },
+        { "name": "Unreal Engine", "level": "Intermediate" },
+        { "name": "Blender (3D Modeling)", "level": "Intermediate" }
+      ]
+    },
+    {
+      "category": "Media & Creative Production",
+      "items": [
+        { "name": "Video Editing", "level": "Advanced" },
+        { "name": "Videography", "level": "Proficient" }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "[PROJECT 1 TITLE - CLICK TO EDIT IN data.json]",
+      "category": "Unity / 3D Game",
+      "description": "Placeholder slot for your game or coding project. Replace this description, tech stack, thumbnail, and links inside data.json.",
+      "techStack": ["Unity", "C#", "Blender"],
+      "thumbnailPath": "",
+      "liveDemoUrl": "",
+      "githubRepoUrl": ""
+    },
+    {
+      "title": "[PROJECT 2 TITLE - CLICK TO EDIT IN data.json]",
+      "category": "Web / Three.js",
+      "description": "Placeholder slot for your second project. Leave thumbnailPath or URLs blank if not ready—the UI handles empty fields cleanly.",
+      "techStack": ["HTML/CSS/JS", "Three.js"],
+      "thumbnailPath": "",
+      "liveDemoUrl": "",
+      "githubRepoUrl": ""
+    },
+    {
+      "title": "[PROJECT 3 TITLE - CLICK TO EDIT IN data.json]",
+      "category": "Unreal Engine / Video",
+      "description": "Placeholder slot for your third project, showreel, or software build.",
+      "techStack": ["Unreal Engine", "C++", "Video Editing"],
+      "thumbnailPath": "",
+      "liveDemoUrl": "",
+      "githubRepoUrl": ""
+    }
+  ]
+}

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Muhammad Umar Farooq | 3D Game Developer & Creator Portfolio</title>
+  <meta name="description" content="Interactive 3D low-poly diorama portfolio of Muhammad Umar Farooq - Computer Science Student, Game Developer, 3D Generalist & Video Editor.">
+  <meta name="theme-color" content="#C8F4C4">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Muhammad Umar Farooq | 3D Game Developer Portfolio">
+  <meta property="og:description" content="Explore my interactive 3D diorama floating island portfolio, CV, projects, and skills.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Lilita One, Fredoka, Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Lilita+One&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 (for crisp RPG & social icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Three.js Import Map for standard CDN ES Modules -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Background Ambience & Gradient Layer -->
+  <div id="canvas-container"></div>
+
+  <!-- Virtual Scroll Space for Camera Track Interpolation -->
+  <div id="scroll-track">
+    <div class="scroll-section" data-section="hero"></div>
+    <div class="scroll-section" data-section="about"></div>
+    <div class="scroll-section" data-section="experience"></div>
+    <div class="scroll-section" data-section="projects"></div>
+    <div class="scroll-section" data-section="skills"></div>
+    <div class="scroll-section" data-section="contact"></div>
+  </div>
+
+  <!-- HUD & UI Overlay Layer (Pointer-events controlled) -->
+  <div id="ui-overlay">
+
+    <!-- Top Navigation Banners (Top Left Guild Banners) -->
+    <div class="banner-rack banner-rack-left" aria-label="Quick links and navigation">
+      <div class="banner-rod">
+        <span class="finial finial-left"></span>
+        <span class="finial finial-right"></span>
+      </div>
+      <div class="banners-group">
+        <!-- Banner 1: Red Shield (Projects / Quests) -->
+        <button class="hanging-banner banner-red" data-action="projects" title="Quests & Projects">
+          <div class="banner-cloth">
+            <div class="banner-border"></div>
+            <div class="banner-emblem"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="banner-ribbon"></div>
+          </div>
+          <span class="banner-tooltip">Projects</span>
+        </button>
+        <!-- Banner 2: Blue Star (Experience) -->
+        <button class="hanging-banner banner-blue" data-action="experience" title="Experience Roll">
+          <div class="banner-cloth">
+            <div class="banner-border"></div>
+            <div class="banner-emblem"><i class="fa-solid fa-certificate"></i></div>
+            <div class="banner-ribbon"></div>
+          </div>
+          <span class="banner-tooltip">Experience</span>
+        </button>
+        <!-- Banner 3: Purple Flame (Skills) -->
+        <button class="hanging-banner banner-purple" data-action="skills" title="Skills & Masteries">
+          <div class="banner-cloth">
+            <div class="banner-border"></div>
+            <div class="banner-emblem"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            <div class="banner-ribbon"></div>
+          </div>
+          <span class="banner-tooltip">Skills</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Top Navigation Banners (Top Right Guild Banners) -->
+    <div class="banner-rack banner-rack-right" aria-label="Socials and profile">
+      <div class="banner-rod">
+        <span class="finial finial-left"></span>
+        <span class="finial finial-right"></span>
+      </div>
+      <div class="banners-group">
+        <!-- Banner 4: Orange Sun (About / Bio) -->
+        <button class="hanging-banner banner-orange" data-action="about" title="About & Education">
+          <div class="banner-cloth">
+            <div class="banner-border"></div>
+            <div class="banner-emblem"><i class="fa-solid fa-sun"></i></div>
+            <div class="banner-ribbon"></div>
+          </div>
+          <span class="banner-tooltip">About</span>
+        </button>
+        <!-- Banner 5: Purple Moon (Audio SFX Toggle) -->
+        <button class="hanging-banner banner-violet" id="audio-toggle-btn" title="Toggle Sound FX">
+          <div class="banner-cloth">
+            <div class="banner-border"></div>
+            <div class="banner-emblem"><i class="fa-solid fa-volume-high" id="audio-icon"></i></div>
+            <div class="banner-ribbon"></div>
+          </div>
+          <span class="banner-tooltip" id="audio-tooltip-text">Audio: ON</span>
+        </button>
+        <!-- Banner 6: Green Shield (Contact / Socials) -->
+        <button class="hanging-banner banner-green" data-action="contact" title="Contact & Socials">
+          <div class="banner-cloth">
+            <div class="banner-border"></div>
+            <div class="banner-emblem"><i class="fa-solid fa-feather-pointed"></i></div>
+            <div class="banner-ribbon"></div>
+          </div>
+          <span class="banner-tooltip">Contact</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main 3D Beveled Header (Matching Reference Image) -->
+    <header id="main-header">
+      <div class="header-content">
+        <h1 class="header-title-3d">
+          <span class="title-wood">3D GAME DEVELOPER</span>
+          <span class="title-stone">&amp; DESIGNER</span>
+        </h1>
+        <div class="developer-sub-badge" id="dev-badge">
+          <span class="badge-icon"><i class="fa-solid fa-dice-d20"></i></span>
+          <span class="badge-text" id="header-subtitle">MUHAMMAD UMAR FAROOQ &bull; CS UNDERGRADUATE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Left Wooden Signboard Buttons -->
+    <aside class="ui-side-controls controls-left">
+      <!-- PLAY / Portfolio Wooden Signboard -->
+      <div class="signboard-wrapper">
+        <button class="wood-signboard btn-play" id="btn-portfolio" data-action="projects" aria-label="Open Portfolio Projects">
+          <div class="wood-plank">
+            <span class="rivet rivet-tl"></span>
+            <span class="rivet rivet-tr"></span>
+            <span class="rivet rivet-bl"></span>
+            <span class="rivet rivet-br"></span>
+            <span class="sign-text-3d">PLAY</span>
+          </div>
+        </button>
+        <span class="sign-subtext">Portfolio</span>
+      </div>
+
+      <!-- MESSAGE / Contact Shield Signboard -->
+      <div class="signboard-wrapper">
+        <button class="shield-signboard btn-contact-shield" id="btn-contact-left" data-action="contact" aria-label="Open Contact Dialog">
+          <div class="shield-crest shield-orange">
+            <div class="shield-rim"></div>
+            <div class="shield-inner">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+          </div>
+          <div class="wood-plank wood-plank-shield">
+            <span class="rivet rivet-tr"></span>
+            <span class="rivet rivet-br"></span>
+            <span class="sign-text-3d sign-text-amber">MESSAGE</span>
+          </div>
+        </button>
+        <span class="sign-subtext">Contact</span>
+      </div>
+    </aside>
+
+    <!-- Right Wooden Signboard Buttons -->
+    <aside class="ui-side-controls controls-right">
+      <!-- ABOUT Wooden Signboard -->
+      <div class="signboard-wrapper">
+        <button class="wood-signboard btn-about" id="btn-about" data-action="about" aria-label="Open About & Education">
+          <div class="wood-plank">
+            <span class="rivet rivet-tl"></span>
+            <span class="rivet rivet-tr"></span>
+            <span class="rivet rivet-bl"></span>
+            <span class="rivet rivet-br"></span>
+            <span class="sign-text-3d">ABOUT</span>
+          </div>
+        </button>
+        <span class="sign-subtext">About</span>
+      </div>
+
+      <!-- RESUME / CV Blue Shield Signboard -->
+      <div class="signboard-wrapper">
+        <button class="shield-signboard btn-resume-shield" id="btn-resume-right" data-action="resume" aria-label="View Resume & CV">
+          <div class="shield-crest shield-blue">
+            <div class="shield-rim"></div>
+            <div class="shield-inner">
+              <i class="fa-solid fa-scroll"></i>
+            </div>
+          </div>
+          <div class="wood-plank wood-plank-shield">
+            <span class="rivet rivet-tr"></span>
+            <span class="rivet rivet-br"></span>
+            <span class="sign-text-3d sign-text-blue">RESUME</span>
+          </div>
+        </button>
+        <span class="sign-subtext">Download CV</span>
+      </div>
+    </aside>
+
+    <!-- Center Hanging Wooden Signboard: "Scroll to Explore" on Metal Chains -->
+    <div id="hanging-explore-sign" aria-hidden="true">
+      <div class="chain chain-left">
+        <span class="link"></span><span class="link"></span><span class="link"></span><span class="link"></span>
+      </div>
+      <div class="chain chain-right">
+        <span class="link"></span><span class="link"></span><span class="link"></span><span class="link"></span>
+      </div>
+      <button class="chain-signboard" id="btn-explore-center" data-action="explore">
+        <span class="chain-ring ring-left"></span>
+        <span class="chain-ring ring-right"></span>
+        <span class="chain-sign-text">Scroll to Explore</span>
+      </button>
+      <div class="sign-post-pole"></div>
+    </div>
+
+    <!-- Bottom Left: Stylized 2.5D Wizard Mascot -->
+    <div id="mascot-container" title="Click me for a magic trick!" role="button" tabindex="0" aria-label="Wizard mascot companion">
+      <div class="wizard-character" id="wizard-mascot">
+        <!-- Hat -->
+        <div class="wiz-hat">
+          <div class="wiz-hat-cone"></div>
+          <div class="wiz-hat-brim"></div>
+          <div class="wiz-hat-star"><i class="fa-solid fa-star"></i></div>
+        </div>
+        <!-- Face & Beard -->
+        <div class="wiz-head">
+          <div class="wiz-eyes">
+            <span class="wiz-eye eye-left"><span class="wiz-pupil"></span></span>
+            <span class="wiz-eye eye-right"><span class="wiz-pupil"></span></span>
+          </div>
+          <div class="wiz-beard"></div>
+          <div class="wiz-nose"></div>
+        </div>
+        <!-- Body & Robe -->
+        <div class="wiz-body">
+          <div class="wiz-robe"></div>
+          <div class="wiz-belt"></div>
+        </div>
+        <!-- Hand & Sword/Staff -->
+        <div class="wiz-hand-left"></div>
+        <div class="wiz-hand-right">
+          <div class="wiz-staff">
+            <div class="staff-gem"></div>
+          </div>
+        </div>
+        <!-- Speech Bubble (appears on hover / click) -->
+        <div class="wiz-speech-bubble" id="wiz-speech">
+          <span>Greetings Adventurer! Explore my island or click landmarks!</span>
+        </div>
+      </div>
+      <div class="mascot-shadow"></div>
+    </div>
+
+    <!-- Bottom Right: Custom Animated Mouse-Wheel Icon -->
+    <div id="scroll-mouse-indicator" role="button" tabindex="0" data-action="explore" aria-label="Scroll down to explore diorama">
+      <span class="indicator-label">Scroll to Explore</span>
+      <div class="mouse-icon">
+        <div class="mouse-body">
+          <div class="mouse-wheel"></div>
+        </div>
+        <div class="mouse-arrow">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Raycaster Floating Tooltip Badge -->
+    <div id="rpg-tooltip" class="rpg-tooltip-hidden" aria-live="polite">
+      <div class="tooltip-badge">
+        <span class="tooltip-icon" id="tooltip-icon"><i class="fa-solid fa-sparkles"></i></span>
+        <span class="tooltip-text" id="tooltip-text">Landmark</span>
+        <span class="tooltip-prompt">Click to Inspect</span>
+      </div>
+      <div class="tooltip-pointer"></div>
+    </div>
+
+    <!-- Active Landmark Quick Pill Navigation (Shows current landmark in scroll journey) -->
+    <nav id="journey-nav" aria-label="Diorama Landmark Waypoints">
+      <button class="waypoint-pill active" data-step="0" title="Floating Island Overlook">
+        <i class="fa-solid fa-compass"></i><span>Overlook</span>
+      </button>
+      <button class="waypoint-pill" data-step="1" title="Cozy Workshop (About & Education)">
+        <i class="fa-solid fa-house-chimney"></i><span>Workshop</span>
+      </button>
+      <button class="waypoint-pill" data-step="2" title="Wizard Tower (Experience Roll)">
+        <i class="fa-solid fa-chess-rook"></i><span>Tower</span>
+      </button>
+      <button class="waypoint-pill" data-step="3" title="Treasure Vault (Projects)">
+        <i class="fa-solid fa-gem"></i><span>Vault</span>
+      </button>
+      <button class="waypoint-pill" data-step="4" title="Adventurer's Campfire (Skills)">
+        <i class="fa-solid fa-fire"></i><span>Campfire</span>
+      </button>
+      <button class="waypoint-pill" data-step="5" title="Crystal Cascade (Contact)">
+        <i class="fa-solid fa-water"></i><span>Cascade</span>
+      </button>
+    </nav>
+
+  </div> <!-- /#ui-overlay -->
+
+
+  <!-- ============================================================ -->
+  <!-- RPG QUEST PARCHMENT MODAL CONTAINERS (CV & PORTFOLIO CONTENT) -->
+  <!-- ============================================================ -->
+  <div id="rpg-modal-backdrop" class="modal-backdrop-hidden" aria-hidden="true">
+    <div class="rpg-modal" id="rpg-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      
+      <!-- Modal Wooden Frame Header -->
+      <div class="modal-frame-header">
+        <div class="modal-wax-seal">
+          <i class="fa-solid fa-dice-d20"></i>
+        </div>
+        <h2 class="modal-title" id="modal-title">QUEST TITLE</h2>
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close dialog">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Scrollable Parchment Body -->
+      <div class="modal-body-scroll" id="modal-body-content">
+        <!-- Dynamically injected content via app.js from data.json -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-frame-footer">
+        <span class="footer-ribbon-left"></span>
+        <button class="rpg-btn-primary" id="modal-action-btn">
+          <i class="fa-solid fa-check"></i> <span>Acknowledge</span>
+        </button>
+        <span class="footer-ribbon-right"></span>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Toast Notification / Magic Notice -->
+  <div id="rpg-toast" class="toast-hidden" role="alert" aria-live="assertive">
+    <span class="toast-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+    <span class="toast-message" id="toast-message">Magic cast!</span>
+  </div>
+
+  <!-- Main JavaScript Application Module -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
